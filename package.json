@@ -26,7 +26,10 @@
     "test:chrome": "npm test -- --browsers Chrome",
     "test:node": "mocha --ui tdd tests/node"
   },
-  "repository": "aframevr/aframe",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/IMCAG/aframe.git"
+  },
   "license": "MIT",
   "dependencies": {
     "@tweenjs/tween.js": "^16.8.0",
