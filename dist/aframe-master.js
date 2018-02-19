@@ -1,4 +1,4 @@
-(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.AFRAME = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
+(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.AFRAME = f()}})(function(){var define,module,exports;return (function(){function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s}return e})()({1:[function(_dereq_,module,exports){
 (function (process){
 /**
  * Tween.js - Licensed under the MIT license
@@ -949,6 +949,8 @@ for (var i = 0, len = code.length; i < len; ++i) {
   revLookup[code.charCodeAt(i)] = i
 }
 
+// Support decoding URL-safe base64 strings, as Node.js does.
+// See: https://en.wikipedia.org/wiki/Base64#URL_applications
 revLookup['-'.charCodeAt(0)] = 62
 revLookup['_'.charCodeAt(0)] = 63
 
@@ -1010,7 +1012,7 @@ function encodeChunk (uint8, start, end) {
   var tmp
   var output = []
   for (var i = start; i < end; i += 3) {
-    tmp = (uint8[i] << 16) + (uint8[i + 1] << 8) + (uint8[i + 2])
+    tmp = ((uint8[i] << 16) & 0xFF0000) + ((uint8[i + 1] << 8) & 0xFF00) + (uint8[i + 2] & 0xFF)
     output.push(tripletToBase64(tmp))
   }
   return output.join('')
@@ -3783,7 +3785,7 @@ if (typeof Object.create === 'function') {
 /*!
  * Determine if an object is a Buffer
  *
- * @author   Feross Aboukhadijeh <feross@feross.org> <http://feross.org>
+ * @author   Feross Aboukhadijeh <https://feross.org>
  * @license  MIT
  */
 
@@ -15981,7 +15983,7 @@ function rebuildAttribute (attrib, data, itemSize) {
 		this.castShadow = false;
 		this.receiveShadow = false;
 
-		this.frustumCulled = false;
+		this.frustumCulled = true;
 		this.renderOrder = 0;
 
 		this.userData = {};
@@ -26153,6 +26155,7 @@ function rebuildAttribute (attrib, data, itemSize) {
 			var pose = frameData.pose;
 
 			if ( pose.position !== null ) {
+
 				camera.position.fromArray( pose.position );
 
 			} else {
@@ -26190,7 +26193,7 @@ function rebuildAttribute (attrib, data, itemSize) {
 
 			cameraL.far = camera.far;
 			cameraR.far = camera.far;
-			
+
 			cameraVR.matrixWorld.copy( camera.matrixWorld );
 			cameraVR.matrixWorldInverse.copy( camera.matrixWorldInverse );
 
@@ -27594,8 +27597,9 @@ function rebuildAttribute (attrib, data, itemSize) {
 						}
 
 					} else {
+
 						initMaterial( object.material, scene.fog, object );
-						setProgram( camera, scene.fog, object.material, object );
+
 					}
 
 				}
@@ -27659,7 +27663,9 @@ function rebuildAttribute (attrib, data, itemSize) {
 			if ( camera.parent === null ) camera.updateMatrixWorld();
 
 			if ( vr.enabled ) {
+
 				camera = vr.getCamera( camera );
+
 			}
 
 			_projScreenMatrix.multiplyMatrices( camera.projectionMatrix, camera.matrixWorldInverse );
@@ -27761,7 +27767,7 @@ function rebuildAttribute (attrib, data, itemSize) {
 			state.setPolygonOffset( false );
 
 			if ( vr.enabled ) {
-				
+
 				vr.submitFrame();
 
 			}
@@ -27976,6 +27982,7 @@ function rebuildAttribute (attrib, data, itemSize) {
 		}
 
 		function renderObject( object, scene, camera, geometry, material, group ) {
+
 			object.onBeforeRender( _this, scene, camera, geometry, material, group );
 
 			object.modelViewMatrix.multiplyMatrices( camera.matrixWorldInverse, object.matrixWorld );
@@ -28062,6 +28069,7 @@ function rebuildAttribute (attrib, data, itemSize) {
 				material.onBeforeCompile( materialProperties.shader );
 
 				program = programCache.acquireProgram( material, materialProperties.shader, parameters, code );
+
 				materialProperties.program = program;
 				material.program = program;
 
@@ -59161,23 +59169,23 @@ module.exports={
         "spec": ">=0.9.36 <0.10.0",
         "type": "range"
       },
-      "X:\\Development\\aframe"
+      "D:\\Projekte\\aframe"
     ]
   ],
   "_from": "webvr-polyfill@>=0.9.36 <0.10.0",
-  "_id": "webvr-polyfill@0.9.38",
+  "_id": "webvr-polyfill@0.9.41",
   "_inCache": true,
   "_location": "/webvr-polyfill",
-  "_nodeVersion": "8.1.4",
+  "_nodeVersion": "8.6.0",
   "_npmOperationalInternal": {
     "host": "s3://npm-registry-packages",
-    "tmp": "tmp/webvr-polyfill-0.9.38.tgz_1505328121599_0.8887633208651096"
+    "tmp": "tmp/webvr-polyfill-0.9.41.tgz_1513211986286_0.6021944496314973"
   },
   "_npmUser": {
     "name": "jsantell",
     "email": "jsantell@gmail.com"
   },
-  "_npmVersion": "5.4.1",
+  "_npmVersion": "5.3.0",
   "_phantomChildren": {},
   "_requested": {
     "raw": "webvr-polyfill@^0.9.36",
@@ -59191,11 +59199,11 @@ module.exports={
   "_requiredBy": [
     "/"
   ],
-  "_resolved": "https://registry.npmjs.org/webvr-polyfill/-/webvr-polyfill-0.9.38.tgz",
-  "_shasum": "740099a2f268a56a0bf18181fb57395efad70712",
+  "_resolved": "https://registry.npmjs.org/webvr-polyfill/-/webvr-polyfill-0.9.41.tgz",
+  "_shasum": "dcaaed05ea8e14a44b629679ca32b9a35780e0e3",
   "_shrinkwrap": null,
   "_spec": "webvr-polyfill@^0.9.36",
-  "_where": "X:\\Development\\aframe",
+  "_where": "D:\\Projekte\\aframe",
   "authors": [
     "Boris Smus <boris@smus.com>",
     "Brandon Jones <tojiro@gmail.com>",
@@ -59212,15 +59220,15 @@ module.exports={
     "mocha": "^3.2.0",
     "semver": "^5.3.0",
     "webpack": "^2.6.1",
-    "webpack-dev-server": "^2.4.5"
+    "webpack-dev-server": "2.7.1"
   },
   "directories": {},
   "dist": {
-    "integrity": "sha512-HABweqWYE0suk6P5TdHlagJK56HSecB5xKj6ZshocrxSj9UmNOCjCRv4vFYHCaFZKtuKWa8niRHVbJ3Vo7JYDg==",
-    "shasum": "740099a2f268a56a0bf18181fb57395efad70712",
-    "tarball": "https://registry.npmjs.org/webvr-polyfill/-/webvr-polyfill-0.9.38.tgz"
+    "integrity": "sha512-xgZPm7DXd2iUn4wh+/ubh1AzYWaHlx6VCmpxgTvoKzi1sMz9ePChQvsq1tm18aUfuzs6dtMrnNWoaQIwl81QsQ==",
+    "shasum": "dcaaed05ea8e14a44b629679ca32b9a35780e0e3",
+    "tarball": "https://registry.npmjs.org/webvr-polyfill/-/webvr-polyfill-0.9.41.tgz"
   },
-  "gitHead": "8063169c6fc52342ebe5524d7f217987f9aa9cab",
+  "gitHead": "878873d2edef3308f1d702abb72842c61541e8fe",
   "homepage": "https://github.com/googlevr/webvr-polyfill",
   "keywords": [
     "vr",
@@ -59255,7 +59263,7 @@ module.exports={
     "test": "mocha",
     "watch": "webpack-dev-server"
   },
-  "version": "0.9.38"
+  "version": "0.9.41"
 }
 
 },{}],48:[function(_dereq_,module,exports){
@@ -60904,11 +60912,14 @@ CardboardVRDisplay.prototype.onResize_ = function(e) {
       'position: absolute',
       'top: 0',
       'left: 0',
-      'width: ' + Math.max(screen.width, screen.height) + 'px',
-      'height: ' + Math.min(screen.height, screen.width) + 'px',
+      // Use vw/vh to handle implicitly devicePixelRatio; issue #282
+      'width: 100vw',
+      'height: 100vh',
       'border: 0',
       'margin: 0',
-      'padding: 0 10px 10px 0',
+      // Set no padding in the case where you don't have control over
+      // the content injection, like in Unity WebGL; issue #282
+      'padding: 0px',
       'box-sizing: content-box',
     ];
     gl.canvas.setAttribute('style', cssProperties.join('; ') + ';');
@@ -63809,11 +63820,16 @@ function MouseKeyboardVRDisplay() {
 
   this.capabilities.hasOrientation = true;
 
+  this.onKeyDown_ = this.onKeyDown_.bind(this);
+  this.onMouseDown_ = this.onMouseDown_.bind(this);
+  this.onMouseMove_ = this.onMouseMove_.bind(this);
+  this.onMouseUp_ = this.onMouseUp_.bind(this);
+
   // Attach to mouse and keyboard events.
-  window.addEventListener('keydown', this.onKeyDown_.bind(this));
-  window.addEventListener('mousemove', this.onMouseMove_.bind(this));
-  window.addEventListener('mousedown', this.onMouseDown_.bind(this));
-  window.addEventListener('mouseup', this.onMouseUp_.bind(this));
+  window.addEventListener('keydown', this.onKeyDown_);
+  window.addEventListener('mousemove', this.onMouseMove_);
+  window.addEventListener('mousedown', this.onMouseDown_);
+  window.addEventListener('mouseup', this.onMouseUp_);
 
   // "Private" members.
   this.phi_ = 0;
@@ -63958,8 +63974,12 @@ module.exports = MouseKeyboardVRDisplay;
 // If running in node with a window mock available, globalize its members
 // if needed. Otherwise, just continue to `./main`
 if (typeof global !== 'undefined' && global.window) {
-  global.document = global.window.document;
-  global.navigator = global.window.navigator;
+  if (!global.document) {
+    global.document = global.window.document;
+  }
+  if (!global.navigator) {
+    global.navigator = global.window.navigator;
+  }
 }
 
 _dereq_('./main');
@@ -64422,8 +64442,13 @@ FusionPoseSensor.prototype.updateDeviceMotion_ = function(deviceMotion) {
     this.previousTimestampS = timestampS;
     return;
   }
+
   this.accelerometer.set(-accGravity.x, -accGravity.y, -accGravity.z);
-  this.gyroscope.set(rotRate.alpha, rotRate.beta, rotRate.gamma);
+  if (Util.isR7()) {
+    this.gyroscope.set(-rotRate.beta, rotRate.alpha, rotRate.gamma);
+  } else {
+    this.gyroscope.set(rotRate.alpha, rotRate.beta, rotRate.gamma);
+  }
 
   // With iOS and Firefox Android, rotationRate is reported in degrees,
   // so we first convert to radians.
@@ -64768,8 +64793,16 @@ Util.isFirefoxAndroid = (function() {
   };
 })();
 
+Util.isR7 = (function() {
+  var isR7 = navigator.userAgent.indexOf('R7 Build') !== -1;
+  return function() {
+    return isR7;
+  };
+})();
+
 Util.isLandscapeMode = function() {
-  return (window.orientation == 90 || window.orientation == -90);
+  var rtn = (window.orientation == 90 || window.orientation == -90);
+  return Util.isR7() ? !rtn : rtn;
 };
 
 // Helper method to validate the time steps of sensor timestamps.
@@ -66098,13 +66131,17 @@ function _createXHR(options) {
 }
 
 function getXml(xhr) {
-    if (xhr.responseType === "document") {
-        return xhr.responseXML
-    }
-    var firefoxBugTakenEffect = xhr.responseXML && xhr.responseXML.documentElement.nodeName === "parsererror"
-    if (xhr.responseType === "" && !firefoxBugTakenEffect) {
-        return xhr.responseXML
-    }
+    // xhr.responseXML will throw Exception "InvalidStateError" or "DOMException"
+    // See https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/responseXML.
+    try {
+        if (xhr.responseType === "document") {
+            return xhr.responseXML
+        }
+        var firefoxBugTakenEffect = xhr.responseXML && xhr.responseXML.documentElement.nodeName === "parsererror"
+        if (xhr.responseType === "" && !firefoxBugTakenEffect) {
+            return xhr.responseXML
+        }
+    } catch (e) {}
 
     return null
 }
@@ -66190,7 +66227,10 @@ module.exports={
     "test:chrome": "npm test -- --browsers Chrome",
     "test:node": "mocha --ui tdd tests/node"
   },
-  "repository": "aframevr/aframe",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/IMCAG/aframe.git"
+  },
   "license": "MIT",
   "dependencies": {
     "@tweenjs/tween.js": "^16.8.0",
@@ -68629,7 +68669,8 @@ module.exports.Component = registerComponent('look-controls', {
     touchEnabled: {default: true},
     hmdEnabled: {default: true},
     reverseMouseDrag: {default: false},
-    standing: {default: true}
+    standing: {default: true},
+    gyroEnabled: {default: true}
   },
 
   init: function () {
@@ -68789,7 +68830,7 @@ module.exports.Component = registerComponent('look-controls', {
     hmdQuaternion = hmdQuaternion.copy(this.dolly.quaternion);
     hmdEuler.setFromQuaternion(hmdQuaternion, 'YXZ');
 
-    if (sceneEl.isMobile) {
+    if (sceneEl.isMobile && this.data.gyroEnabled) {
       // On mobile, do camera rotation with touch events and sensors.
       rotation.x = radToDeg(hmdEuler.x) + radToDeg(pitchObject.rotation.x);
       rotation.y = radToDeg(hmdEuler.y) + radToDeg(yawObject.rotation.y);
@@ -78448,7 +78489,7 @@ _dereq_('./core/a-mixin');
 _dereq_('./extras/components/');
 _dereq_('./extras/primitives/');
 
-console.log('A-Frame Version: 0.7.1 (Date 18-10-2017, Commit #0da6cf4)');
+console.log('A-Frame Version: 0.7.1 (Date 19-02-2018, Commit #0c816158)');
 console.log('three Version:', pkg.dependencies['three']);
 console.log('WebVR Polyfill Version:', pkg.dependencies['webvr-polyfill']);
 
