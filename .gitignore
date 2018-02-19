@@ -5,6 +5,7 @@ build
 firefox/
 tests/coverage/
 gh-pages/
+.idea/
 karma.conf.js
 node_modules
 npm-debug.log*
